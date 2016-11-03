@@ -26,7 +26,7 @@ public:
         
         this->exectuable = tmpp[0];
         
-        for(int i = 1;i < tmpp.size();++ i) {
+        for(int i = 1;i < (int)tmpp.size();++ i) {
             this->argu.push_back(tmpp[i]);
         }
     }
@@ -65,7 +65,7 @@ public:
     friend ostream& operator <<(ostream& os, Command c) {
         os << c.getExec();
         if((int)c.getArguVec().size() > 0) {
-            for(int i = 0;i < c.getArguVec().size();++ i) {
+            for(int i = 0;i < (int)c.getArguVec().size();++ i) {
                 os << " " << c.getArguVec()[i];
             }
             

@@ -53,16 +53,16 @@ public:
         }
         vector<string> tmp = a->split(cnTrim, " ");
         
-        if(cnTrim[cnTrim.size()-1] != ' ') {
+        if(cnTrim[(int)cnTrim.size()-1] != ' ') {
             if(exec == "test" && cnTrim.empty()) return 1;
             if(tmp.size() <= 1 and cn[0] == '-') return 0;
         }
         
-        if(tmp.size() > 1) {
+        if((int)tmp.size() > 1) {
             currentFlag = tmp[0];
             arg = tmp[1];
         }
-        if(tmp.size() == 1 and cnTrim[0] == '-') return 0;
+        if((int)tmp.size() == 1 and cnTrim[0] == '-') return 0;
         
         else {
             currentFlag = "-e";
