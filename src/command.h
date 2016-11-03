@@ -43,7 +43,7 @@ public:
     // return tht arguments in a line in char*
     char* getArguVec_c_str() {
         string s;
-        for(int i = 0;i < this->argu.size();++ i) {
+        for(int i = 0;i < (int)this->argu.size();++ i) {
             if(i != 0) s += " ";
             s += argu[i];
         }
@@ -54,7 +54,7 @@ public:
     // return tht arguments in a line in string
     string getArguVec_str() {
         string s;
-        for(int i = 0;i < this->argu.size();++ i) {
+        for(int i = 0;i < (int)this->argu.size();++ i) {
             if(i != 0) s += " ";
             s += argu[i];
         }
@@ -64,7 +64,7 @@ public:
     
     friend ostream& operator <<(ostream& os, Command c) {
         os << c.getExec();
-        if(c.getArguVec().size() > 0) {
+        if((int)c.getArguVec().size() > 0) {
             for(int i = 0;i < c.getArguVec().size();++ i) {
                 os << " " << c.getArguVec()[i];
             }

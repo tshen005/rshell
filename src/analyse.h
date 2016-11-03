@@ -64,7 +64,7 @@ public:
     
     // remove the spaces in the begin and end of the string
     string removeSpace(string a) {
-        for(int i = 0;i < a.size();++ i) {
+        for(int i = 0;i < (int)a.size();++ i) {
             if(a[i] != ' ') {
                 a = a.substr(i);
                 break;
