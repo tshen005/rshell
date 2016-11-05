@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 
 #include "commandline.h"
-#include "test.h"
+//#include "test.h"
 
 
 
@@ -49,8 +49,8 @@ public:
         bool returnStatus = false;
         bool child = false;
         string exe = cn.getCmd().getExec();
-        char beg = exe.at(0);					//get front [
-        char end = NULL;
+    //    char beg = exe.at(0);					//get front [
+        char end;
         if( cn.getCmd().getArguVec().size() > 0 ){
             end = cn.getCmd().getArguVec_str().at(cn.getCmd().getArguVec_str().size()-1);		//get back ]
         }
@@ -59,8 +59,7 @@ public:
             if(exe.at(1) == ']' || exe.at(exe.size()-1) == ']')
             { end = ']'; }
         }
-        if(exe == "Test")
-        {exe = "test";}
+        
         
         if(exe == "cd")
         {
@@ -94,7 +93,7 @@ public:
                 return make_pair(true,child);
             }
         }
-        else if(exe == "test" || beg == '[')	//check to see if command is test
+       /* else if(exe == "test" || beg == '[')	//check to see if command is test
         {
             if((end != ']' || end == '\0') && exe != "test")	//if end bracket not found
             {
@@ -126,7 +125,7 @@ public:
                 child = false;
                 return make_pair(true, child);
             }
-        }
+        }*/
         else			//for shell commands
         {
             pid_t pid = fork();
