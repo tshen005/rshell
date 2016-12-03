@@ -4,6 +4,7 @@
 //std included
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <stdio.h>
 #include <utility>
@@ -84,7 +85,7 @@ class Shell
               setenv("PWD",oldpwd,1);
               oldpwd = pwd;
           }
-	      else if(cn.getCommand().getArgListStr() != "-"){
+	      else if(cn.getCommand().getArgListStr()[0] != '-' || cn.getCommand().getArgListStr() != "-"){
               pwd=getenv("PWD");
               oldpwd=pwd;
               string a = oldpwd;
@@ -95,9 +96,9 @@ class Shell
               char* c=strcat(c1,cn.getCommand().getArgList_c_str());
               //cout << c << "**" << endl;
               setenv("PWD",c,1);
-              cout << getenv("PWD") << endl;
+              //cout << getenv("PWD") << endl;
               oldpwd=const_cast<char*>(a.c_str());
-              cout << oldpwd << endl;
+              //cout << oldpwd << endl;
           }
 	      //cout << "error:" << errno << endl;
 	    }
@@ -113,8 +114,10 @@ class Shell
 	    }
 	  if(errno != 0)
 	    {
+            //setenv("PWD",oldpwd,1);
 	      cout << "rshell: " << exe << ": " +  cn.getCommand().getArgListStr() << ": " << strerror(errno) << endl;
 	      child = false;
+            
 	      return make_pair(false,child);
 	    }
 	  else
