@@ -22,9 +22,14 @@ class Shell
 {
  private:
   bool status;		//check status of whether shell cont. running or not
-  
+    char* pwd;
+    char* oldpwd;
  public:
-  Shell(){};			//default constructor
+    
+  Shell(){
+      oldpwd=getenv("HOME");
+      pwd=getenv("HOME");
+  };			//default constructor
   
   bool getStatus()	//get current status of shell
   { return status; }
@@ -35,8 +40,8 @@ class Shell
   void finish()		//shell is done
   { status = false; }
   
-  pair<bool,bool> execute(const CommandNode & cn)
-    {
+  pair<bool,bool> execute(const CommandNode & cn) {
+      
       //initialize variables and values
       bool returnStatus = false;
       bool child = false;
@@ -65,18 +70,45 @@ class Shell
 	  int argSize = cn.getCommand().getArgList().size();
 	  errno = 0;
 	  
-	  if(argSize > 0)
-	    {
-	      if(cn.getCommand().getArgListStr() == "~")
-		{ chdir(getenv("HOME")); }
-	      else
-		{ chdir(cn.getCommand().getArgList_c_str()); }
+	  if(argSize > 0){
+	     if(cn.getCommand().getArgListStr() == "~"){
+             oldpwd=getenv("PWD");
+            pwd=getenv("HOME");
+            chdir(pwd);
+            setenv("PWD",pwd,1);
+          }
+          else if(cn.getCommand().getArgListStr() == "-") {
+              //cout << oldpwd << "^^^" << endl;
+              pwd=getenv("PWD");
+              chdir(oldpwd);
+              setenv("PWD",oldpwd,1);
+              oldpwd = pwd;
+          }
+	      else if(cn.getCommand().getArgListStr() != "-"){
+              pwd=getenv("PWD");
+              oldpwd=pwd;
+              string a = oldpwd;
+              
+              //cout << oldpwd << endl;
+              chdir(cn.getCommand().getArgList_c_str());
+              char* c1=strcat(pwd,"/");
+              char* c=strcat(c1,cn.getCommand().getArgList_c_str());
+              //cout << c << "**" << endl;
+              setenv("PWD",c,1);
+              cout << getenv("PWD") << endl;
+              oldpwd=const_cast<char*>(a.c_str());
+              cout << oldpwd << endl;
+          }
 	      //cout << "error:" << errno << endl;
 	    }
 	  else
 	    {
 	      //cd to home directory
-	      chdir(getenv("HOME"));
+            oldpwd = getenv("PWD");
+            
+            pwd=getenv("HOME");
+            chdir(pwd);
+            setenv("PWD",pwd,1);
 	      //cout << "error:" << errno << endl;
 	    }
 	  if(errno != 0)
@@ -402,12 +434,7 @@ class Shell
 	char username[1024] ={0};
 	int getUsername_resp = getlogin_r(username,sizeof(username)-1);
 	
-	/*
-	//printf("%s\n",username);
-	char* home = getlogin();
-	if(home != NULL)
-	printf("%s\n",home);
-	*/
+	
 	char hostname [1024] = {0};
 	int getHostname_resp = gethostname(hostname,sizeof(hostname)-1);
 	//cout << getUsername_resp << " " << getHostname_resp<< endl;
@@ -417,7 +444,7 @@ class Shell
 	    //string username_str = "";
 	    //string hostname_str = "";
 	    //cout << username_str <<"@"<<hostname_str;
-	    printf("%s@%s", username,hostname);
+	    printf("[%s@%s %s]", username,hostname,getenv("PWD"));
 	  }
 	cout <<"$ ";	//start getting inputs for shell program
 	
